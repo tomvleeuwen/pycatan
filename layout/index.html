@@ -46,7 +46,7 @@
    function poll_inner(){
      $.ajax({
         dataType: "json",
-        url: "http://localhost:8080/commands.json",
+        url: "/api/commands.json",
         success: parse_json,
         error: restart_poll,
         timeout: 10000
