@@ -12,10 +12,19 @@ NB_TILES = 19
 
 playlist = ["dingdong.mp3", "ring.mp3"]
 
+# Settings:
+# hash_rnd:     Hash the time of the button-press to get basically true-random numbers (for all practical purposes)
+#               If false, it is probably still virtually impossible to affect the numbers, but in theory possible.
+# logfile:      Logfile to write all the messages to that are also displayed in the scrolling on-screen log.
+#               Can be used to analyze the game later on :-)
+# btle_timeout: Time before re-transmitting the same LED states via BTLE (if the board is power-cycled or last message was not received)
+#
+
 settings = {
-        'hash_rnd' : True,
-        'logfile'  : '/tmp/catan.log'
-        }
+        'hash_rnd'      : True,
+        'logfile'       : '/tmp/catan.log',
+        'btle_timeout'  : 2.0,
+    }
 
 Tile_values = [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12]
 Resource_count = {
@@ -87,6 +96,17 @@ adjecent_tiles = {
 
 # If the tile number is 6 or 8, it is not allowed to be adjecent to another tile that has number 6 or 8.
 disallow_adjecent = [6, 8]
+
+
+
+
+
+
+
+
+
+
+
 
 # Below here comes some code to convert it to easily-accessible arrays. It contains no more settings.
 

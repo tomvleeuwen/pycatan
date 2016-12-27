@@ -16,6 +16,7 @@ import threading
 
 from server import MakeHandlerClass, ThreadedHTTPServer
 from board import Board
+from btle import BTLE
 import config
 
 class KolonistenVanFS(object):
@@ -80,7 +81,9 @@ class KolonistenVanFS(object):
             dice_sum = dice1 + dice2
             self.stats[dice_sum] += 1
             self.update_graph()
-            # TODO: Highlight selected tiles.
+            #Highlight selected tiles.
+            self.board.update_state(dice1 + dice2 + 2, None)
+            self.update_btle()
         
     def update_graph(self):
         graphdata = {}
@@ -117,6 +120,10 @@ def main(args):
     server_thread = threading.Thread(target=server.serve_forever)
     server_thread.daemon = True
     server_thread.start()
+    
+    btle = BTLE(btle_cmds)
+    btle.daemon = True
+    btle.start()
     
     while True:
         time.sleep(1)
