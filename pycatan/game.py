@@ -50,8 +50,8 @@ class KolonistenVanFS(object):
             mp3idx = self.get_random_int(0, len(config.playlist))
             self.append_httpcmd("PLAY_SOUND", config.playlist[mp3idx])
             self.append_httpcmd("DICE_ROLL")
-            msg  = str(datetime.now())
-            msg += ": Button pressed!"
+            self.append_httpcmd("MSG_WRITE", "Rolling the dice!")
+            msg = "Button pressed!"
             self.log(msg)
         
     def gpio_up(self):
@@ -62,7 +62,7 @@ class KolonistenVanFS(object):
             self.append_httpcmd("MSG_WRITE", msg)
             boardstr = repr(self.board)
             for msg in boardstr.split("\n"):
-                self.log(str(datetime.now()) + ": " + msg)
+                self.log(msg)
             self.update_btle()
             # Still placing tiles, but next time the button is pressed we just want to play!
             self.game_state = self.STATE_PLAYING
@@ -74,8 +74,7 @@ class KolonistenVanFS(object):
             dice2 = dices / 6
             
             self.append_httpcmd("DICE_SET", dice1+1, dice2+1)
-            msg  = str(datetime.now())
-            msg += ": Button released! Dice faces: %d, %d" % (dice1+1, dice2+1)
+            msg = "Button released! Dice faces: %d, %d" % (dice1+1, dice2+1)
             self.log(msg)
             
             dice_sum = dice1 + dice2
@@ -94,7 +93,8 @@ class KolonistenVanFS(object):
     def log(self, msg):
         self.append_httpcmd("LOG", msg)
         with open(config.settings['logfile'], 'a') as logfile:
-            logfile.write(msg + '\n')
+            now = str(datetime.now()) + ": "
+            logfile.write(now + msg + '\n')
     
     def append_httpcmd(self, cmd, *args):
         """ Append a command to be send to the webbrowser """
@@ -107,7 +107,7 @@ class KolonistenVanFS(object):
 def main(args):
     
     # Create objects for communication between python-threads
-    # (Due to the GIL, so we can safely read-modify-write
+    # (Due to the GIL, we can safely read-modify-write
     #  these lists from all threads)
     http_cmds = []
     btle_cmds = []

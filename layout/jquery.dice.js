@@ -31,7 +31,7 @@
   {
     var m_this = this;
     var defaults = {
-      'background': '#ffffff',
+      'background': '',
       'callback': null,
       'glyphSize': 120,
       'glyphSrc': 'prettydice.png',
