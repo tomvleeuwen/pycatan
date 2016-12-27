@@ -125,11 +125,27 @@ def main(args):
     btle.daemon = True
     btle.start()
     
-    while True:
-        time.sleep(1)
-        game.gpio_down()
-        time.sleep(1)
-        game.gpio_up()
+    try:
+        import RPi.GPIO as GPIO
+        # GPIO.BCM seems to be some kind of default mode?
+        GPIO.setmode(GPIO.BCM)
+        # Set Pull-Up
+        GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        while True:
+            GPIO.wait_for_edge(23, GPIO.FALLING)
+            print "Falling edge!"
+            game.gpio_down()
+            GPIO.wait_for_edge(23, GPIO.RISING)
+            print "Rising edge!"
+            game.gpio_up()
+    
+    except ImportError:
+        # Fall-back to simulated keypresses...
+        while True:
+            time.sleep(1)
+            game.gpio_down()
+            time.sleep(1)
+            game.gpio_up()
     
     
     return 0
